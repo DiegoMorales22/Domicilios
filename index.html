@@ -3,85 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Domicilios de hoy</title>
+<meta name="theme-color" content="#A9E3EE">
+<title>Domis Angie Acuña</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #EEF2F5;
-  --surface: #FFFFFF;
-  --ink: #10253A;
-  --muted: #566676;
-  --line: #D0D9E1;
-  --accent: #2F6FED;
-  --done: #12805C;
-  --strike: #D8352F;
-  --tile-done: #E3E9EE;
+  --fur-top: #A9E3EE;
+  --fur-mid: #D9F3F7;
+  --fur-low: #EAF9FB;
+  --surface: #F4FCFE;
+  --surface-done: #D9C8F3;
+  --ink: #2B1B4A;
+  --muted: #5D4C86;
+  --line: #8FD3E0;
+  --teal: #1F8FA5;
+  --spot: #7C4DB5;
+  --spot-deep: #4B2A85;
+  --pink: #B8326F;
   color-scheme: light;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0E1822;
-    --surface: #17242F;
-    --ink: #EAF1F6;
-    --muted: #9AACBA;
-    --line: #2A3B49;
-    --accent: #6E9BFF;
-    --done: #3DD6A0;
-    --strike: #FF6B63;
-    --tile-done: #101C26;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0E1822;
-  --surface: #17242F;
-  --ink: #EAF1F6;
-  --muted: #9AACBA;
-  --line: #2A3B49;
-  --accent: #6E9BFF;
-  --done: #3DD6A0;
-  --strike: #FF6B63;
-  --tile-done: #101C26;
-  color-scheme: dark;
-}
-html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--fur-mid); }
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
   min-height: 100dvh;
-  background: var(--bg);
+  background:
+    radial-gradient(90% 45% at 100% 100%, rgba(124, 77, 181, .20), transparent 65%),
+    linear-gradient(180deg, var(--fur-top) 0%, var(--fur-mid) 45%, var(--fur-low) 100%);
+  background-attachment: fixed;
   color: var(--ink);
-  font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Fredoka', 'Trebuchet MS', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 17px;
   line-height: 1.4;
   -webkit-tap-highlight-color: transparent;
 }
-main { max-width: 480px; margin: 0 auto; padding: 20px 16px 32px; }
+main { max-width: 480px; margin: 0 auto; padding: 22px 16px 36px; }
 
-header { padding: 4px 4px 18px; }
-.day { margin: 0; color: var(--muted); font-size: 16px; }
-.count { display: flex; align-items: baseline; gap: 10px; margin-top: 2px; }
+header { position: relative; padding: 2px 4px 20px; text-align: center; }
+header > * { position: relative; z-index: 1; }
+header::before, header::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  background: var(--spot);
+  opacity: .22;
+  pointer-events: none;
+}
+header::before { left: 2px; top: 8px; width: 46px; height: 46px; box-shadow: 30px 58px 0 -15px var(--spot); }
+header::after { right: 6px; top: 40px; width: 36px; height: 36px; box-shadow: -34px -34px 0 -12px var(--spot); }
+
+.brand {
+  margin: 0;
+  font-family: 'Pacifico', 'Brush Script MT', cursive;
+  font-weight: 400;
+  font-size: clamp(54px, 18vw, 76px);
+  line-height: 1.1;
+  color: var(--spot);
+  text-shadow: 0 3px 0 #F5E6C4, 0 6px 14px rgba(75, 42, 133, .25);
+}
+.owner { margin: 0; font-weight: 600; font-size: 22px; letter-spacing: .02em; color: var(--ink); }
+.day { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+.count { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin-top: 14px; }
 .count .n {
-  font-family: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: clamp(92px, 30vw, 140px);
+  font-weight: 700;
+  font-size: clamp(92px, 30vw, 132px);
   line-height: .95;
-  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
-.count .of {
-  font-family: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 28px;
-  color: var(--muted);
-}
-.status { margin: 6px 0 0; font-weight: 600; font-size: 18px; }
-.all-done .n, .all-done .status { color: var(--done); }
+.count .of { font-weight: 500; font-size: 28px; color: var(--teal); }
+.status { margin: 8px 0 0; font-weight: 500; font-size: 18px; color: var(--ink); }
+.all-done .n, .all-done .status { color: var(--teal); }
+.all-done .status { font-weight: 600; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tile {
@@ -91,40 +90,52 @@ header { padding: 4px 4px 18px; }
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  aspect-ratio: 5 / 4;
+  aspect-ratio: 3 / 2;
   padding: 14px 14px 12px;
   text-align: left;
   font: inherit;
   color: var(--ink);
   background: var(--surface);
   border: 2px solid var(--line);
-  border-radius: 18px;
+  border-radius: 22px;
   cursor: pointer;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
-  transition: transform .08s ease-out, border-color .15s;
+  transition: transform .08s ease-out, border-color .15s, box-shadow .15s;
 }
-.tile:active:not(:disabled) { transform: scale(.97); border-color: var(--accent); }
-.tile:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.tile .num {
-  font-family: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 44px;
-  line-height: 1;
+.tile::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: -12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--spot);
+  opacity: .16;
+  pointer-events: none;
 }
+.tile:active:not(:disabled) {
+  transform: scale(.97);
+  border-color: var(--spot);
+  box-shadow: 0 0 0 3px rgba(124, 77, 181, .25);
+}
+.tile:focus-visible, .btn:focus-visible { outline: 3px solid var(--spot); outline-offset: 3px; }
+.tile .num { font-weight: 700; font-size: 46px; line-height: 1; }
 .tile .meta { font-size: 14px; color: var(--muted); }
 .tile.done {
-  background: var(--tile-done);
+  background: var(--surface-done);
   border-color: transparent;
   cursor: default;
 }
-.tile.done .num, .tile.done .meta { color: var(--muted); }
-.tile.done .meta { font-weight: 600; }
-.slash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tile.done::after { opacity: .0; }
+.tile.done .num { color: var(--muted); }
+.tile.done .meta { color: var(--spot-deep); font-weight: 600; }
+.slash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 .slash path {
   fill: none;
-  stroke: var(--strike);
+  stroke: var(--spot-deep);
   stroke-width: 7px;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
@@ -146,20 +157,20 @@ header { padding: 4px 4px 18px; }
   color: var(--ink);
   background: var(--surface);
   border: 1.5px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   cursor: pointer;
   touch-action: manipulation;
 }
 .btn:disabled { opacity: .45; cursor: default; }
-.btn.danger { color: var(--strike); }
-.btn.primary { background: var(--strike); border-color: var(--strike); color: #fff; }
+.btn.danger { color: var(--pink); }
+.btn.primary { background: var(--spot); border-color: var(--spot); color: #fff; }
 
 .confirm {
   margin-top: 14px;
   padding: 14px;
   background: var(--surface);
-  border: 2px solid var(--strike);
-  border-radius: 16px;
+  border: 2px solid var(--spot);
+  border-radius: 18px;
 }
 .confirm p { margin: 0 0 12px; font-weight: 600; }
 .confirm .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -169,7 +180,7 @@ header { padding: 4px 4px 18px; }
   padding: 12px 14px;
   background: var(--surface);
   border: 1.5px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   font-size: 15px;
   color: var(--muted);
 }
@@ -179,13 +190,13 @@ header { padding: 4px 4px 18px; }
   padding: 0;
   font: inherit;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--spot);
   background: none;
   border: 0;
   text-decoration: underline;
   cursor: pointer;
 }
-.note.warn { border-color: var(--strike); color: var(--ink); }
+.note.warn { border-color: var(--pink); color: var(--ink); }
 [hidden] { display: none !important; }
 </style>
 </head>
@@ -217,9 +228,11 @@ header { padding: 4px 4px 18px; }
       var raw = localStorage.getItem(KEY);
       if (raw) {
         var s = JSON.parse(raw);
-        if (s && Array.isArray(s.ticks) && s.ticks.length <= N) {
+        if (s && Array.isArray(s.ticks)) {
+          var tk = s.ticks.slice(0, N).map(function (t) { return (typeof t === 'number' && isFinite(t)) ? t : null; });
+          while (tk.length < N) tk.push(null);
           return {
-            ticks: s.ticks.concat(new Array(N - s.ticks.length).fill(null)).map(function (t) { return (typeof t === 'number' && isFinite(t)) ? t : null; }),
+            ticks: tk,
             day: typeof s.day === 'string' ? s.day : null
           };
         }
@@ -301,9 +314,11 @@ header { padding: 4px 4px 18px; }
     var head = document.getElementById('head');
     head.className = all ? 'all-done' : '';
     head.innerHTML =
+      '<h1 class="brand">Domis</h1>' +
+      '<p class="owner">Angie Acuña</p>' +
       '<p class="day">' + (state.day ? longDate(keyToDate(state.day)) : longDate(new Date())) + '</p>' +
       '<div class="count"><span class="n">' + c + '</span><span class="of">de ' + N + '</span></div>' +
-      '<p class="status">' + (all ? '¡Listo! Terminaste los ' + N + ' domicilios' : (c === 0 ? 'Toca cada casilla al terminar un domicilio' : 'Faltan ' + (N - c))) + '</p>';
+      '<p class="status">' + (all ? '¡Lo lograste, Angie! 💜 Los ' + N + ' domis hechos' : (c === 0 ? 'Toca cada casilla al terminar un domi' : 'Faltan ' + (N - c))) + '</p>';
 
     var html = '';
     for (var i = 0; i < N; i++) {
@@ -311,9 +326,9 @@ header { padding: 4px 4px 18px; }
       var done = ts !== null;
       html += '<button type="button" class="tile' + (done ? ' done' : '') + (i === fresh ? ' fresh' : '') + '" data-i="' + i + '"' +
         (done ? ' disabled' : '') +
-        ' aria-label="Domicilio ' + (i + 1) + (done ? ', hecho a las ' + fmtTime(ts) : ', pendiente') + '">' +
+        ' aria-label="Domi ' + (i + 1) + (done ? ', hecho a las ' + fmtTime(ts) : ', pendiente') + '">' +
         '<span class="num">' + (i + 1) + '</span>' +
-        '<span class="meta">' + (done ? 'Hecho ' + fmtTime(ts) : 'Pendiente') + '</span>' +
+        '<span class="meta">' + (done ? '💜 ' + fmtTime(ts) : 'Pendiente') + '</span>' +
         (done ? '<svg class="slash" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M6 88 C 28 66, 58 38, 94 12"/></svg>' : '') +
         '</button>';
     }
@@ -324,7 +339,7 @@ header { padding: 4px 4px 18px; }
 
     var conf = document.getElementById('confirm');
     if (pending === 'undo' && c > 0) {
-      conf.innerHTML = '<div class="confirm"><p>¿Quitar el tachón del domicilio ' + (lastIndex() + 1) + '?</p><div class="row">' +
+      conf.innerHTML = '<div class="confirm"><p>¿Quitar el tachón del domi ' + (lastIndex() + 1) + '?</p><div class="row">' +
         '<button type="button" class="btn primary" data-act="do-undo">Sí, quitarlo</button>' +
         '<button type="button" class="btn" data-act="cancel">No, dejarlo</button></div></div>';
     } else if (pending === 'reset' && c > 0) {
