@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Domicilios de hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #EEF2F5;
+  --surface: #FFFFFF;
+  --ink: #10253A;
+  --muted: #566676;
+  --line: #D0D9E1;
+  --accent: #2F6FED;
+  --done: #12805C;
+  --strike: #D8352F;
+  --tile-done: #E3E9EE;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1822;
+    --surface: #17242F;
+    --ink: #EAF1F6;
+    --muted: #9AACBA;
+    --line: #2A3B49;
+    --accent: #6E9BFF;
+    --done: #3DD6A0;
+    --strike: #FF6B63;
+    --tile-done: #101C26;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1822;
+  --surface: #17242F;
+  --ink: #EAF1F6;
+  --muted: #9AACBA;
+  --line: #2A3B49;
+  --accent: #6E9BFF;
+  --done: #3DD6A0;
+  --strike: #FF6B63;
+  --tile-done: #101C26;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+main { max-width: 480px; margin: 0 auto; padding: 20px 16px 32px; }
+
+header { padding: 4px 4px 18px; }
+.day { margin: 0; color: var(--muted); font-size: 16px; }
+.count { display: flex; align-items: baseline; gap: 10px; margin-top: 2px; }
+.count .n {
+  font-family: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(92px, 30vw, 140px);
+  line-height: .95;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.count .of {
+  font-family: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--muted);
+}
+.status { margin: 6px 0 0; font-weight: 600; font-size: 18px; }
+.all-done .n, .all-done .status { color: var(--done); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  aspect-ratio: 5 / 4;
+  padding: 14px 14px 12px;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform .08s ease-out, border-color .15s;
+}
+.tile:active:not(:disabled) { transform: scale(.97); border-color: var(--accent); }
+.tile:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.tile .num {
+  font-family: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  line-height: 1;
+}
+.tile .meta { font-size: 14px; color: var(--muted); }
+.tile.done {
+  background: var(--tile-done);
+  border-color: transparent;
+  cursor: default;
+}
+.tile.done .num, .tile.done .meta { color: var(--muted); }
+.tile.done .meta { font-weight: 600; }
+.slash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.slash path {
+  fill: none;
+  stroke: var(--strike);
+  stroke-width: 7px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.tile.fresh .slash { animation: wipe .32s ease-out both; }
+@keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@media (prefers-reduced-motion: reduce) {
+  .tile.fresh .slash { animation: none; }
+  .tile { transition: none; }
+}
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.btn {
+  min-height: 50px;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.danger { color: var(--strike); }
+.btn.primary { background: var(--strike); border-color: var(--strike); color: #fff; }
+
+.confirm {
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--surface);
+  border: 2px solid var(--strike);
+  border-radius: 16px;
+}
+.confirm p { margin: 0 0 12px; font-weight: 600; }
+.confirm .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.note {
+  margin: 16px 4px 0;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.note button {
+  display: inline;
+  margin-top: 8px;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.note.warn { border-color: var(--strike); color: var(--ink); }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main id="app">
+  <header id="head"></header>
+  <div class="grid" id="grid"></div>
+  <div class="actions">
+    <button class="btn" id="undo" type="button">Deshacer el último</button>
+    <button class="btn danger" id="reset" type="button">Empezar de nuevo</button>
+  </div>
+  <div id="confirm" aria-live="polite"></div>
+  <div id="notes" aria-live="polite"></div>
+</main>
+
+<script>
+(function () {
+  var N = 12;
+  var KEY = 'domicilios-tachador-v1';
+  var storageOk = true;
+  var state = load();
+  var fresh = -1;
+  var pending = null; // 'undo' | 'reset' | null
+
+  function blank() { return { ticks: new Array(N).fill(null), day: null }; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && Array.isArray(s.ticks) && s.ticks.length <= N) {
+          return {
+            ticks: s.ticks.concat(new Array(N - s.ticks.length).fill(null)).map(function (t) { return (typeof t === 'number' && isFinite(t)) ? t : null; }),
+            day: typeof s.day === 'string' ? s.day : null
+          };
+        }
+      }
+    } catch (e) { storageOk = false; }
+    return blank();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (e) {
+      storageOk = false;
+    }
+  }
+
+  function count() { return state.ticks.filter(function (t) { return t !== null; }).length; }
+
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function longDate(d) {
+    return cap(d.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' }));
+  }
+
+  function keyToDate(k) {
+    var p = k.split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+
+  function fmtTime(ts) {
+    return new Date(ts).toLocaleTimeString('es-CO', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function lastIndex() {
+    var idx = -1, best = -Infinity;
+    state.ticks.forEach(function (t, i) { if (t !== null && t > best) { best = t; idx = i; } });
+    return idx;
+  }
+
+  function buzz() { try { if (navigator.vibrate) navigator.vibrate(25); } catch (e) {} }
+
+  function tick(i) {
+    if (state.ticks[i] !== null) return; // las ya tachadas no se tocan
+    state.ticks[i] = Date.now();
+    if (!state.day) state.day = todayKey();
+    fresh = i;
+    pending = null;
+    save();
+    buzz();
+    render();
+  }
+
+  function undoLast() {
+    var i = lastIndex();
+    if (i >= 0) state.ticks[i] = null;
+    if (count() === 0) state.day = null;
+    fresh = -1;
+    pending = null;
+    save();
+    render();
+  }
+
+  function resetAll() {
+    state = blank();
+    fresh = -1;
+    pending = null;
+    save();
+    render();
+  }
+
+  function render() {
+    var c = count();
+    var all = c === N;
+    var head = document.getElementById('head');
+    head.className = all ? 'all-done' : '';
+    head.innerHTML =
+      '<p class="day">' + (state.day ? longDate(keyToDate(state.day)) : longDate(new Date())) + '</p>' +
+      '<div class="count"><span class="n">' + c + '</span><span class="of">de ' + N + '</span></div>' +
+      '<p class="status">' + (all ? '¡Listo! Terminaste los ' + N + ' domicilios' : (c === 0 ? 'Toca cada casilla al terminar un domicilio' : 'Faltan ' + (N - c))) + '</p>';
+
+    var html = '';
+    for (var i = 0; i < N; i++) {
+      var ts = state.ticks[i];
+      var done = ts !== null;
+      html += '<button type="button" class="tile' + (done ? ' done' : '') + (i === fresh ? ' fresh' : '') + '" data-i="' + i + '"' +
+        (done ? ' disabled' : '') +
+        ' aria-label="Domicilio ' + (i + 1) + (done ? ', hecho a las ' + fmtTime(ts) : ', pendiente') + '">' +
+        '<span class="num">' + (i + 1) + '</span>' +
+        '<span class="meta">' + (done ? 'Hecho ' + fmtTime(ts) : 'Pendiente') + '</span>' +
+        (done ? '<svg class="slash" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M6 88 C 28 66, 58 38, 94 12"/></svg>' : '') +
+        '</button>';
+    }
+    document.getElementById('grid').innerHTML = html;
+
+    document.getElementById('undo').disabled = c === 0;
+    document.getElementById('reset').disabled = c === 0;
+
+    var conf = document.getElementById('confirm');
+    if (pending === 'undo' && c > 0) {
+      conf.innerHTML = '<div class="confirm"><p>¿Quitar el tachón del domicilio ' + (lastIndex() + 1) + '?</p><div class="row">' +
+        '<button type="button" class="btn primary" data-act="do-undo">Sí, quitarlo</button>' +
+        '<button type="button" class="btn" data-act="cancel">No, dejarlo</button></div></div>';
+    } else if (pending === 'reset' && c > 0) {
+      conf.innerHTML = '<div class="confirm"><p>¿Borrar los ' + c + ' tachones y empezar de nuevo?</p><div class="row">' +
+        '<button type="button" class="btn primary" data-act="do-reset">Sí, borrar todo</button>' +
+        '<button type="button" class="btn" data-act="cancel">No, dejarlo</button></div></div>';
+    } else {
+      conf.innerHTML = '';
+    }
+
+    var notes = '';
+    if (state.day && c > 0 && state.day !== todayKey()) {
+      notes += '<div class="note">Estos tachones son del ' + longDate(keyToDate(state.day)).toLowerCase() + '. ' +
+        '<button type="button" data-act="ask-reset">Empezar un día nuevo</button></div>';
+    }
+    if (!storageOk) {
+      notes += '<div class="note warn">Este navegador no está guardando los cambios. No cierres esta página o se perderán los tachones.</div>';
+    }
+    document.getElementById('notes').innerHTML = notes;
+  }
+
+  document.addEventListener('click', function (e) {
+    var tile = e.target.closest('.tile');
+    if (tile && !tile.disabled) { tick(+tile.getAttribute('data-i')); return; }
+    var act = e.target.closest('[data-act]');
+    if (act) {
+      var a = act.getAttribute('data-act');
+      if (a === 'do-undo') undoLast();
+      else if (a === 'do-reset') resetAll();
+      else if (a === 'cancel') { pending = null; render(); }
+      else if (a === 'ask-reset') { pending = 'reset'; render(); }
+      return;
+    }
+    if (e.target.id === 'undo' && count() > 0) { pending = 'undo'; render(); }
+    if (e.target.id === 'reset' && count() > 0) { pending = 'reset'; render(); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
