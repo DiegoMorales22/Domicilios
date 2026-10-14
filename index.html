@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#A9E3EE">
+<title>Domis Angie Acuña</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fur-top: #A9E3EE;
+  --fur-mid: #D9F3F7;
+  --fur-low: #EAF9FB;
+  --surface: #F4FCFE;
+  --surface-done: #D9C8F3;
+  --ink: #2B1B4A;
+  --muted: #5D4C86;
+  --line: #8FD3E0;
+  --teal: #1F8FA5;
+  --spot: #7C4DB5;
+  --spot-deep: #4B2A85;
+  --pink: #B8326F;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--fur-mid); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(90% 45% at 100% 100%, rgba(124, 77, 181, .20), transparent 65%),
+    linear-gradient(180deg, var(--fur-top) 0%, var(--fur-mid) 45%, var(--fur-low) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: 'Fredoka', 'Trebuchet MS', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+main { max-width: 480px; margin: 0 auto; padding: 22px 16px 36px; }
+
+header { position: relative; padding: 2px 4px 20px; text-align: center; }
+header > * { position: relative; z-index: 1; }
+header::before, header::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  background: var(--spot);
+  opacity: .22;
+  pointer-events: none;
+}
+header::before { left: 2px; top: 8px; width: 46px; height: 46px; box-shadow: 30px 58px 0 -15px var(--spot); }
+header::after { right: 6px; top: 40px; width: 36px; height: 36px; box-shadow: -34px -34px 0 -12px var(--spot); }
+
+.brand {
+  margin: 0;
+  font-family: 'Pacifico', 'Brush Script MT', cursive;
+  font-weight: 400;
+  font-size: clamp(54px, 18vw, 76px);
+  line-height: 1.1;
+  color: var(--spot);
+  text-shadow: 0 3px 0 #F5E6C4, 0 6px 14px rgba(75, 42, 133, .25);
+}
+.owner { margin: 0; font-weight: 600; font-size: 22px; letter-spacing: .02em; color: var(--ink); }
+.day { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+.count { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin-top: 14px; }
+.count .n {
+  font-weight: 700;
+  font-size: clamp(92px, 30vw, 132px);
+  line-height: .95;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.count .of { font-weight: 500; font-size: 28px; color: var(--teal); }
+.money {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 8px 18px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+}
+.money .lbl { font-size: 15px; color: var(--muted); }
+.money strong { font-size: 28px; font-weight: 700; line-height: 1.1; color: var(--teal); font-variant-numeric: tabular-nums; }
+.money .max { font-size: 14px; color: var(--muted); }
+.status { margin: 10px 0 0; font-weight: 500; font-size: 18px; color: var(--ink); }
+.all-done .n, .all-done .status { color: var(--teal); }
+.all-done .status { font-weight: 600; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  aspect-ratio: 3 / 2;
+  padding: 14px 14px 12px;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 22px;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform .08s ease-out, border-color .15s, box-shadow .15s;
+}
+.tile::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: -12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--spot);
+  opacity: .16;
+  pointer-events: none;
+}
+.tile:active:not(:disabled) {
+  transform: scale(.97);
+  border-color: var(--spot);
+  box-shadow: 0 0 0 3px rgba(124, 77, 181, .25);
+}
+.tile:focus-visible, .btn:focus-visible { outline: 3px solid var(--spot); outline-offset: 3px; }
+.tile .num { font-weight: 700; font-size: 46px; line-height: 1; }
+.tile .meta { font-size: 14px; color: var(--muted); }
+.tile.done {
+  background: var(--surface-done);
+  border-color: transparent;
+  cursor: default;
+}
+.tile.done::after { opacity: .0; }
+.tile.done .num { color: var(--muted); }
+.tile.done .meta { color: var(--spot-deep); font-weight: 600; }
+.slash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.slash path {
+  fill: none;
+  stroke: var(--spot-deep);
+  stroke-width: 7px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.tile.fresh .slash { animation: wipe .32s ease-out both; }
+@keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@media (prefers-reduced-motion: reduce) {
+  .tile.fresh .slash { animation: none; }
+  .tile { transition: none; }
+}
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.btn {
+  min-height: 50px;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.danger { color: var(--pink); }
+.btn.primary { background: var(--spot); border-color: var(--spot); color: #fff; }
+
+.confirm {
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--surface);
+  border: 2px solid var(--spot);
+  border-radius: 18px;
+}
+.confirm p { margin: 0 0 12px; font-weight: 600; }
+.confirm .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.note {
+  margin: 16px 4px 0;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.note button {
+  display: inline;
+  margin-top: 8px;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--spot);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.note.warn { border-color: var(--pink); color: var(--ink); }
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  background: rgba(43, 27, 74, .6);
+}
+.cele-card {
+  width: 100%;
+  max-width: 340px;
+  padding: 22px 20px 20px;
+  text-align: center;
+  background: var(--surface);
+  border: 3px solid var(--spot);
+  border-radius: 28px;
+  box-shadow: 0 18px 50px rgba(43, 27, 74, .45);
+  animation: pop .45s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+.cele-face { width: 170px; height: 170px; margin: 0 auto 6px; }
+.cele-face svg, .cele-face img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.cele-title {
+  margin: 0;
+  font-family: 'Pacifico', 'Brush Script MT', cursive;
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.15;
+  color: var(--spot);
+}
+.cele-sub { margin: 8px 0 18px; font-weight: 500; font-size: 18px; color: var(--ink); }
+.cele-total { display: block; margin-top: 4px; font-size: 32px; font-weight: 700; color: var(--teal); }
+.cele-card .btn { width: 100%; }
+@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .cele-card { animation: none; } }
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+}
+.stepper .lbl { font-weight: 600; font-size: 17px; line-height: 1.2; }
+.stepper .hint { display: block; font-weight: 400; font-size: 13px; color: var(--muted); }
+.stepper .ctrl { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.stepper .num { min-width: 2ch; text-align: center; font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; }
+.round {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  font: inherit;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.round:focus-visible { outline: 3px solid var(--spot); outline-offset: 3px; }
+.round:disabled { opacity: .4; cursor: default; }
+.round.add { background: var(--spot); border-color: var(--spot); color: #fff; }
+.stepper + .actions { margin-top: 12px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main id="app">
+  <header id="head"></header>
+  <div class="grid" id="grid"></div>
+  <div class="stepper">
+    <div class="lbl">Casillas<span class="hint">Las ya tachadas no se quitan</span></div>
+    <div class="ctrl">
+      <button class="round" id="less" type="button" aria-label="Quitar una casilla">&minus;</button>
+      <span class="num" id="slots" aria-live="polite">12</span>
+      <button class="round add" id="more" type="button" aria-label="Agregar una casilla">+</button>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="undo" type="button">Deshacer el último</button>
+    <button class="btn danger" id="reset" type="button">Empezar de nuevo</button>
+  </div>
+  <div id="confirm" aria-live="polite"></div>
+  <div id="notes" aria-live="polite"></div>
+  <div id="cele"></div>
+</main>
+
+<script>
+(function () {
+  var DEFAULT_N = 12, MIN_N = 1, MAX_N = 30;
+  var N = DEFAULT_N; // se actualiza con las casillas que ella tenga
+  var PRICE = 7000; // valor de cada domi
+
+  function money(n) { return '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  var KEY = 'domicilios-tachador-v1';
+  var storageOk = true;
+  var state = load();
+  N = state.ticks.length;
+  var fresh = -1;
+  var pending = null; // 'undo' | 'reset' | null
+  var celebrate = false;
+
+  // Monstruito original (turquesa con manchas moradas). Si en el repo existe cara.png, se usa esa imagen en su lugar.
+  var FACE_SVG =
+    '<svg viewBox="0 0 200 200" role="img" aria-label="Monstruito feliz" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M64 60 Q52 30 38 22 Q68 20 84 52 Z" fill="#F5E6C4" stroke="#CDB78A" stroke-width="3" stroke-linejoin="round"/>' +
+    '<path d="M136 60 Q148 30 162 22 Q132 20 116 52 Z" fill="#F5E6C4" stroke="#CDB78A" stroke-width="3" stroke-linejoin="round"/>' +
+    '<ellipse cx="100" cy="112" rx="76" ry="72" fill="#7AD3E3" stroke="#1F8FA5" stroke-width="4"/>' +
+    '<g fill="#7C4DB5"><circle cx="78" cy="68" r="9"/><circle cx="100" cy="58" r="8"/><circle cx="122" cy="68" r="9"/><circle cx="40" cy="112" r="9"/><circle cx="160" cy="112" r="9"/></g>' +
+    '<ellipse cx="100" cy="142" rx="44" ry="30" fill="#BDEEF5"/>' +
+    '<ellipse cx="76" cy="102" rx="16" ry="18" fill="#fff" stroke="#2B1B4A" stroke-width="2.5"/>' +
+    '<ellipse cx="124" cy="102" rx="16" ry="18" fill="#fff" stroke="#2B1B4A" stroke-width="2.5"/>' +
+    '<circle cx="78" cy="104" r="8" fill="#2B1B4A"/><circle cx="122" cy="104" r="8" fill="#2B1B4A"/>' +
+    '<circle cx="81" cy="101" r="2.6" fill="#fff"/><circle cx="125" cy="101" r="2.6" fill="#fff"/>' +
+    '<g stroke="#2B1B4A" stroke-width="3" stroke-linecap="round" fill="none"><path d="M62 90 L53 84"/><path d="M68 85 L62 76"/><path d="M76 83 L76 73"/><path d="M138 90 L147 84"/><path d="M132 85 L138 76"/><path d="M124 83 L124 73"/></g>' +
+    '<ellipse cx="100" cy="128" rx="11" ry="8" fill="#5D4C86"/>' +
+    '<path d="M74 146 Q100 184 126 146 Z" fill="#8E2A5E" stroke="#2B1B4A" stroke-width="3" stroke-linejoin="round"/>' +
+    '<ellipse cx="100" cy="158" rx="11" ry="6" fill="#FF8FB8"/>' +
+    '<circle cx="54" cy="138" r="9" fill="#FF8FB8" opacity=".6"/><circle cx="146" cy="138" r="9" fill="#FF8FB8" opacity=".6"/>' +
+    '</svg>';
+
+  function blank() { return { v: 2, ticks: new Array(N).fill(null), day: null }; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && Array.isArray(s.ticks)) {
+          var tk = s.ticks.slice(0, MAX_N).map(function (t) { return (typeof t === 'number' && isFinite(t)) ? t : null; });
+          // Estados guardados por versiones anteriores (sin v:2) se completan a 12; los nuevos respetan las casillas elegidas.
+          if (s.v !== 2) { while (tk.length < DEFAULT_N) tk.push(null); }
+          if (tk.length < MIN_N) tk = new Array(DEFAULT_N).fill(null);
+          return {
+            v: 2,
+            ticks: tk,
+            day: typeof s.day === 'string' ? s.day : null
+          };
+        }
+      }
+    } catch (e) { storageOk = false; }
+    return blank();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (e) {
+      storageOk = false;
+    }
+  }
+
+  function count() { return state.ticks.filter(function (t) { return t !== null; }).length; }
+
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function longDate(d) {
+    return cap(d.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' }));
+  }
+
+  function keyToDate(k) {
+    var p = k.split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+
+  function fmtTime(ts) {
+    return new Date(ts).toLocaleTimeString('es-CO', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function lastIndex() {
+    var idx = -1, best = -Infinity;
+    state.ticks.forEach(function (t, i) { if (t !== null && t > best) { best = t; idx = i; } });
+    return idx;
+  }
+
+  function buzz() { try { if (navigator.vibrate) navigator.vibrate(25); } catch (e) {} }
+
+  function tick(i) {
+    if (state.ticks[i] !== null) return; // las ya tachadas no se tocan
+    state.ticks[i] = Date.now();
+    if (!state.day) state.day = todayKey();
+    fresh = i;
+    pending = null;
+    celebrate = (count() === N);
+    save();
+    buzz();
+    render();
+  }
+
+  function undoLast() {
+    var i = lastIndex();
+    if (i >= 0) state.ticks[i] = null;
+    if (count() === 0) state.day = null;
+    celebrate = false;
+    fresh = -1;
+    pending = null;
+    save();
+    render();
+  }
+
+  function resetAll() {
+    state = blank();
+    celebrate = false;
+    fresh = -1;
+    pending = null;
+    save();
+    render();
+  }
+
+  function addSlot() {
+    if (N >= MAX_N) return;
+    state.ticks.push(null);
+    N = state.ticks.length;
+    celebrate = false;
+    pending = null;
+    save();
+    render();
+  }
+
+  // Quita solo una casilla pendiente (la última que esté sin tachar); las tachadas nunca se borran.
+  function removeSlot() {
+    if (N <= MIN_N) return;
+    var i = state.ticks.lastIndexOf(null);
+    if (i < 0) return;
+    state.ticks.splice(i, 1);
+    N = state.ticks.length;
+    fresh = -1;
+    celebrate = false;
+    pending = null;
+    save();
+    render();
+  }
+
+  function render() {
+    var c = count();
+    var all = c === N;
+    var head = document.getElementById('head');
+    head.className = all ? 'all-done' : '';
+    head.innerHTML =
+      '<h1 class="brand">Domis</h1>' +
+      '<p class="owner">Angie Acuña</p>' +
+      '<p class="day">' + (state.day ? longDate(keyToDate(state.day)) : longDate(new Date())) + '</p>' +
+      '<div class="count"><span class="n">' + c + '</span><span class="of">de ' + N + '</span></div>' +
+      '<p class="money"><span class="lbl">' + (all ? 'Total del día' : 'Llevas') + '</span><strong>' + money(c * PRICE) + '</strong><span class="max">de ' + money(N * PRICE) + '</span></p>' +
+      '<p class="status">' + (all ? '¡Lo lograste, Angie! 💜 Los ' + N + ' domis hechos' : (c === 0 ? 'Toca cada casilla al terminar un domi' : 'Faltan ' + (N - c))) + '</p>';
+
+    var html = '';
+    for (var i = 0; i < N; i++) {
+      var ts = state.ticks[i];
+      var done = ts !== null;
+      html += '<button type="button" class="tile' + (done ? ' done' : '') + (i === fresh ? ' fresh' : '') + '" data-i="' + i + '"' +
+        (done ? ' disabled' : '') +
+        ' aria-label="Domi ' + (i + 1) + (done ? ', hecho a las ' + fmtTime(ts) : ', pendiente') + '">' +
+        '<span class="num">' + (i + 1) + '</span>' +
+        '<span class="meta">' + (done ? '💜 ' + fmtTime(ts) : 'Pendiente') + '</span>' +
+        (done ? '<svg class="slash" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M6 88 C 28 66, 58 38, 94 12"/></svg>' : '') +
+        '</button>';
+    }
+    document.getElementById('grid').innerHTML = html;
+
+    document.getElementById('undo').disabled = c === 0;
+    document.getElementById('reset').disabled = c === 0;
+    document.getElementById('slots').textContent = N;
+    document.getElementById('less').disabled = N <= MIN_N || state.ticks.indexOf(null) < 0;
+    document.getElementById('more').disabled = N >= MAX_N;
+
+    var conf = document.getElementById('confirm');
+    if (pending === 'undo' && c > 0) {
+      conf.innerHTML = '<div class="confirm"><p>¿Quitar el tachón del domi ' + (lastIndex() + 1) + '?</p><div class="row">' +
+        '<button type="button" class="btn primary" data-act="do-undo">Sí, quitarlo</button>' +
+        '<button type="button" class="btn" data-act="cancel">No, dejarlo</button></div></div>';
+    } else if (pending === 'reset' && c > 0) {
+      conf.innerHTML = '<div class="confirm"><p>¿Borrar los ' + c + ' tachones y empezar de nuevo?</p><div class="row">' +
+        '<button type="button" class="btn primary" data-act="do-reset">Sí, borrar todo</button>' +
+        '<button type="button" class="btn" data-act="cancel">No, dejarlo</button></div></div>';
+    } else {
+      conf.innerHTML = '';
+    }
+
+    var notes = '';
+    if (state.day && c > 0 && state.day !== todayKey()) {
+      notes += '<div class="note">Estos tachones son del ' + longDate(keyToDate(state.day)).toLowerCase() + '. ' +
+        '<button type="button" data-act="ask-reset">Empezar un día nuevo</button></div>';
+    }
+    if (!storageOk) {
+      notes += '<div class="note warn">Este navegador no está guardando los cambios. No cierres esta página o se perderán los tachones.</div>';
+    }
+    document.getElementById('notes').innerHTML = notes;
+
+    var cele = document.getElementById('cele');
+    if (celebrate && all) {
+      cele.innerHTML =
+        '<div class="overlay" id="cele-bg" role="dialog" aria-modal="true" aria-labelledby="cele-t">' +
+        '<div class="cele-card">' +
+        '<div class="cele-face">' + FACE_SVG +
+        '<img src="cara.png" alt="" hidden onload="this.hidden=false;this.previousElementSibling.hidden=true">' +
+        '</div>' +
+        '<h2 class="cele-title" id="cele-t">¡Lo lograste, Angie!</h2>' +
+        '<p class="cele-sub">' + N + ' domis hechos 💜<strong class="cele-total">' + money(N * PRICE) + '</strong></p>' +
+        '<button type="button" class="btn primary" data-act="close-cele">¡Gracias!</button>' +
+        '</div></div>';
+    } else {
+      cele.innerHTML = '';
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.target.id === 'cele-bg') { celebrate = false; render(); return; }
+    var tile = e.target.closest('.tile');
+    if (tile && !tile.disabled) { tick(+tile.getAttribute('data-i')); return; }
+    var act = e.target.closest('[data-act]');
+    if (act) {
+      var a = act.getAttribute('data-act');
+      if (a === 'do-undo') undoLast();
+      else if (a === 'do-reset') resetAll();
+      else if (a === 'cancel') { pending = null; render(); }
+      else if (a === 'ask-reset') { pending = 'reset'; render(); }
+      else if (a === 'close-cele') { celebrate = false; render(); }
+      return;
+    }
+    if (e.target.id === 'undo' && count() > 0) { pending = 'undo'; render(); }
+    if (e.target.id === 'reset' && count() > 0) { pending = 'reset'; render(); }
+    if (e.target.id === 'more') addSlot();
+    if (e.target.id === 'less') removeSlot();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
